@@ -171,4 +171,31 @@ internal class ServerConnection
             Console.WriteLine(e.Message);
         }
     }
+    public async Task<bool> PostDescription(string interestedIn, string gender, int height, int weight)
+    {
+        try
+        {
+            var jsonData = new
+            {
+                interestedIn,
+                gender,
+                height,
+                weight
+            };
+            string jsonString = JsonSerializer.Serialize(jsonData);
+            StringContent sendTs = new StringContent(jsonString, Encoding.UTF8);
+            HttpResponseMessage response = await client.PostAsync("/description", sendTs);
+
+            Message oneMsg = JsonSerializer.Deserialize<Message>(await response.Content.ReadAsStringAsync());
+            response.EnsureSuccessStatusCode();
+
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
+        return true;
+    }
 }
