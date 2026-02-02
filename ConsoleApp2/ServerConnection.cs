@@ -119,6 +119,24 @@ internal class ServerConnection
         }
         return true;
     }
+    public async Task<List<Profile>> GetProfiles(string newUsername)
+    {
+        List<Profile> data = new List<Profile>();
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync("/profile");
+            string responseString = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            data = JsonSerializer.Deserialize<List<Profile>>(responseString);
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return data;
+        }
+        return data;
+    }
     public async Task DeleteUser()
     {
         try
