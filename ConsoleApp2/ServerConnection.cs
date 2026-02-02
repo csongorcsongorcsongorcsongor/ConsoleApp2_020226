@@ -119,7 +119,7 @@ internal class ServerConnection
         }
         return true;
     }
-    public async Task<List<Profile>> GetProfiles(string newUsername)
+    public async Task<List<Profile>> GetProfiles()
     {
         List<Profile> data = new List<Profile>();
         try
@@ -128,6 +128,24 @@ internal class ServerConnection
             string responseString = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
             data = JsonSerializer.Deserialize<List<Profile>>(responseString);
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return data;
+        }
+        return data;
+    }
+    public async Task<List<Description>> GetDescription()
+    {
+        List<Description> data = new ();
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync("/profile");
+            string responseString = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            data = JsonSerializer.Deserialize<List<Description>>(responseString);
 
         }
         catch (Exception e)
